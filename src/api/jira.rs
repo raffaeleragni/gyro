@@ -1,7 +1,7 @@
 mod data;
 
-use self::data::Sections;
-use super::BackendAPI;
+use self::data::{Issue, Sections};
+use super::{BackendAPI, Item};
 use async_trait::async_trait;
 use std::{collections::HashMap, env, error::Error};
 
@@ -23,6 +23,19 @@ impl Jira {
 
 #[async_trait]
 impl BackendAPI for Jira {
+    async fn fetch(&self, key: &str) -> Result<Item, Box<dyn Error>> {
+        let client = reqwest::Client::new();
+        let resp = client
+            .get(format!("{}/rest/api/3/issue/{}", self.host, key))
+            .basic_auth(&self.user, Some(&self.token))
+            .send()
+            .await?
+            .text()
+            .await?;
+        let result = serde_json::from_str::<Issue>(&resp)?;
+        Ok(Item { key: result.key })
+    }
+
     /// Result: map of {key: title} of found tickets from the query string
     async fn find(&self, query: &str) -> Result<HashMap<String, String>, Box<dyn Error>> {
         let client = reqwest::Client::new();
@@ -40,7 +53,12 @@ impl BackendAPI for Jira {
             .iter()
             .flat_map(|s| &s.sections)
             .flat_map(|s| &s.issues)
-            .map(|i| (i.key.clone(), i.summary_text.clone()))
+            .map(|i| {
+                (
+                    i.key.clone(),
+                    i.summary_text.clone().unwrap_or(String::new()),
+                )
+            })
             .collect();
         Ok(result)
     }
@@ -52,7 +70,15 @@ mod jira_test {
 
     #[tokio::test]
     #[ignore]
-    async fn test_live() {
+    async fn test_live_fetch() {
+        let api = Jira::new();
+        let issue = api.fetch("TEST-1").await.unwrap();
+        println!("{:#?}", issue);
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn test_live_find() {
         let api = Jira::new();
         let query = String::from("test");
         let issues = api.find(&query).await.unwrap();
