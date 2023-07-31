@@ -1,9 +1,7 @@
-use async_trait::async_trait;
-
 use crate::api::BackendAPI;
 
 pub struct Gyro {
-    api: Box<dyn BackendAPI>,
+    pub api: Box<dyn BackendAPI>,
 }
 
 impl Gyro {

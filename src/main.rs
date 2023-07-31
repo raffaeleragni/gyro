@@ -1,15 +1,14 @@
-use std::env;
-
-use crate::api::{jira::Jira, BackendAPI};
+use crate::{api::jira::Jira, gyro::Gyro};
 
 mod api;
 mod gyro;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let api = Jira::new();
-    let query = String::from(env::args().nth(1).unwrap().as_str());
-    let issues = api.find(&query).await?;
-    println!("{:#?}", issues);
+    let gyro = Gyro {
+        api: Box::new(Jira::new()),
+    };
+    let output = gyro.gyro_show().await;
+    println!("{:#?}", output);
     Ok(())
 }

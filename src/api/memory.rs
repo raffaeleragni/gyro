@@ -1,6 +1,6 @@
 use super::{BackendAPI, Item};
 use async_trait::async_trait;
-use std::{collections::HashMap, fmt::Display, ops::Deref};
+use std::{collections::HashMap, fmt::Display};
 
 #[derive(Default)]
 pub struct MemoryAPI {
@@ -11,7 +11,7 @@ pub struct MemoryAPI {
 struct Error;
 
 impl Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, _: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         Ok(())
     }
 }
