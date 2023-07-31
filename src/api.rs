@@ -6,7 +6,7 @@ use std::{collections::HashMap, error::Error};
 
 #[derive(Debug)]
 pub struct Item {
-    key: String,
+    pub key: String,
 }
 
 #[async_trait]

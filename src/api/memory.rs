@@ -2,8 +2,9 @@ use super::{BackendAPI, Item};
 use async_trait::async_trait;
 use std::{collections::HashMap, fmt::Display, ops::Deref};
 
+#[derive(Default)]
 pub struct MemoryAPI {
-    map: HashMap<String, Item>,
+    pub map: HashMap<String, Item>,
 }
 
 #[derive(Debug)]
