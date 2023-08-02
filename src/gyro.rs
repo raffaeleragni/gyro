@@ -77,6 +77,7 @@ mod test {
             "TEST-1".into(),
             Item {
                 key: "TEST-1".into(),
+                title: "test".into(),
             },
         );
         let gyro = Gyro { api: map };
@@ -94,6 +95,7 @@ mod test {
             "TEST-1".into(),
             Item {
                 key: "TEST-1".into(),
+                title: "test".into(),
             },
         );
         let gyro = Gyro { api: map };
@@ -125,12 +127,14 @@ mod test {
             "TEST-1".into(),
             Item {
                 key: "TEST-1".into(),
+                title: "test".into(),
             },
         );
         map.map.insert(
             "TEST-2".into(),
             Item {
                 key: "TEST-2".into(),
+                title: "test".into(),
             },
         );
         let gyro = Gyro { api: map };

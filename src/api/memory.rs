@@ -27,7 +27,7 @@ impl BackendAPI for MemoryAPI {
     async fn fetch(&self, key: &str) -> Result<Item, Box<dyn std::error::Error>> {
         self.map
             .get(key)
-            .map(|i| Item { key: i.key.clone() })
+            .map(|i| (*i).clone())
             .ok_or(Box::new(Error {}))
     }
     async fn find(
@@ -55,6 +55,7 @@ mod test {
                 "TEST-1".to_string(),
                 Item {
                     key: "TEST-1".to_string(),
+                    title: "test".into(),
                 },
             )]),
         };
@@ -72,6 +73,7 @@ mod test {
                 "TEST-1".to_string(),
                 Item {
                     key: "TEST-1".to_string(),
+                    title: "test".into(),
                 },
             )]),
         };

@@ -33,7 +33,10 @@ impl BackendAPI for Jira {
             .text()
             .await?;
         let result = serde_json::from_str::<Issue>(&resp)?;
-        Ok(Item { key: result.key })
+        Ok(Item {
+            key: result.key,
+            title: result.summary_text.unwrap_or("".into()),
+        })
     }
 
     /// Result: map of {key: title} of found tickets from the query string
