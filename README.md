@@ -27,6 +27,8 @@ PROJECT-1: Ticket title
 Search for a key to select. Currently only works if the result is unique.
 
 ```
+$ gyro k title
+PROJECT-1
 $ export GYRO_KEY="`gyro k title`"
 $ gyro s
 PROJECT-1: Ticket title
