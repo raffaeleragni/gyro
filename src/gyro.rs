@@ -104,4 +104,27 @@ mod test {
         let result = gyro.gyro_show().await;
         assert_eq!(result, Some("TEST-1".into()));
     }
+
+    #[tokio::test]
+    #[serial]
+    async fn not_found_when_too_many() {
+        std::env::remove_var("GYRO_KEY");
+        let mut map = Box::<MemoryAPI>::default();
+        map.map.insert(
+            "TEST-1".into(),
+            Item {
+                key: "TEST-1".into(),
+            },
+        );
+        map.map.insert(
+            "TEST-2".into(),
+            Item {
+                key: "TEST-2".into(),
+            },
+        );
+        let gyro = Gyro { api: map };
+
+        let result = gyro.gyro_find("test").await;
+        assert_eq!(result, None);
+    }
 }
