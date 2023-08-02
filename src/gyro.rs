@@ -6,7 +6,7 @@ pub struct Gyro {
 
 impl Gyro {
     pub async fn gyro_show(&self) -> Option<String> {
-        let Ok(key) = std::env::var("GYRO_KEY") else { return None; };
+        let Ok(key) = std::env::var("GYRO_KEY") else { eprintln!("!no key selected!"); return None; };
         if key.is_empty() {
             eprintln!("!no key selected!");
             return None;

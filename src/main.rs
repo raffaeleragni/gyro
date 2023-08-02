@@ -9,6 +9,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         api: Box::new(Jira::new()),
     };
     let output = gyro.gyro_show().await;
-    println!("{:#?}", output);
+    if let Some(output) = output {
+        println!("{:#?}", output);
+    }
     Ok(())
 }
