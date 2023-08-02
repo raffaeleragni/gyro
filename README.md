@@ -10,14 +10,24 @@ The currently selected ticket is expected to be in GYRO_KEY.
 
 ## Commands
 
-### `gyro`
+### `gyro (s)how`
 
 Shows info about the selected key.
 
 ```
-$ gyro
+$ gyro s
 !no key selected!
 $ export GYRO_KEY="PROJECT-1"
-$ gyro
+$ gyro s
+PROJECT-1: Ticket title
+```
+
+### `gyro (k)ey`
+
+Search for a key to select. Currently only works if the result is unique.
+
+```
+$ export GYRO_KEY="`gyro k title`"
+$ gyro s
 PROJECT-1: Ticket title
 ```
