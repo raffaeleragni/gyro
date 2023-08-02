@@ -1,19 +1,19 @@
-use crate::api::BackendAPI;
+use crate::api::{BackendAPI, Item};
 
 pub struct Gyro {
     pub api: Box<dyn BackendAPI>,
 }
 
 impl Gyro {
-    pub async fn gyro_show(&self) -> Option<String> {
+    pub async fn show(&self) -> Option<Item> {
         let Ok(key) = std::env::var("GYRO_KEY") else { eprintln!("!no key selected!"); return None; };
         if key.is_empty() {
             eprintln!("!no key selected!");
             return None;
         }
-        self.api.fetch(key.as_str()).await.ok().map(|i| i.key)
+        self.api.fetch(key.as_str()).await.ok()
     }
-    pub async fn gyro_find(&self, key: &str) -> Option<String> {
+    pub async fn find_key(&self, key: &str) -> Option<String> {
         let Some(map) = self.api.find(key).await.ok() else { return None; };
         if map.len() != 1 {
             return None;
@@ -39,7 +39,7 @@ mod test {
         let gyro = Gyro {
             api: Box::<MemoryAPI>::default(),
         };
-        let result = gyro.gyro_show().await;
+        let result = gyro.show().await;
 
         assert_eq!(result, None);
     }
@@ -51,7 +51,7 @@ mod test {
         let gyro = Gyro {
             api: Box::<MemoryAPI>::default(),
         };
-        let result = gyro.gyro_show().await;
+        let result = gyro.show().await;
 
         assert_eq!(result, None);
     }
@@ -63,7 +63,7 @@ mod test {
         let gyro = Gyro {
             api: Box::<MemoryAPI>::default(),
         };
-        let result = gyro.gyro_show().await;
+        let result = gyro.show().await;
 
         assert_eq!(result, None);
     }
@@ -81,9 +81,9 @@ mod test {
             },
         );
         let gyro = Gyro { api: map };
-        let result = gyro.gyro_show().await;
+        let result = gyro.show().await;
 
-        assert_eq!(result, Some("TEST-1".into()));
+        assert_eq!(result.unwrap().key, "TEST-1");
     }
 
     #[tokio::test]
@@ -100,11 +100,11 @@ mod test {
         );
         let gyro = Gyro { api: map };
 
-        let result = gyro.gyro_find("test").await;
+        let result = gyro.find_key("test").await;
         assert_eq!(result, Some("TEST-1".into()));
 
-        let result = gyro.gyro_show().await;
-        assert_eq!(result, Some("TEST-1".into()));
+        let result = gyro.show().await;
+        assert_eq!(result.unwrap().key, "TEST-1");
     }
 
     #[tokio::test]
@@ -114,7 +114,7 @@ mod test {
         let map = Box::<MemoryAPI>::default();
         let gyro = Gyro { api: map };
 
-        let result = gyro.gyro_find("test").await;
+        let result = gyro.find_key("test").await;
         assert_eq!(result, None);
     }
 
@@ -139,7 +139,7 @@ mod test {
         );
         let gyro = Gyro { api: map };
 
-        let result = gyro.gyro_find("test").await;
+        let result = gyro.find_key("test").await;
         assert_eq!(result, None);
     }
 }

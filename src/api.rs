@@ -4,7 +4,7 @@ pub mod memory;
 use async_trait::async_trait;
 use std::{collections::HashMap, error::Error};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Item {
     pub key: String,
     pub title: String,
