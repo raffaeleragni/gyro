@@ -34,10 +34,11 @@ impl BackendAPI for MemoryAPI {
         &self,
         query: &str,
     ) -> Result<std::collections::HashMap<String, String>, Box<dyn std::error::Error>> {
+        let q = query.to_lowercase();
         Ok(self
             .map
             .iter()
-            .filter(|e| e.0.contains(query))
+            .filter(|e| e.0.to_lowercase().contains(&q))
             .map(|i| (i.0.clone(), i.1.key.clone()))
             .collect())
     }
