@@ -107,6 +107,17 @@ mod test {
 
     #[tokio::test]
     #[serial]
+    async fn not_found_when_zero() {
+        std::env::remove_var("GYRO_KEY");
+        let map = Box::<MemoryAPI>::default();
+        let gyro = Gyro { api: map };
+
+        let result = gyro.gyro_find("test").await;
+        assert_eq!(result, None);
+    }
+
+    #[tokio::test]
+    #[serial]
     async fn not_found_when_too_many() {
         std::env::remove_var("GYRO_KEY");
         let mut map = Box::<MemoryAPI>::default();
